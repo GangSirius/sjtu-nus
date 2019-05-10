@@ -1,0 +1,321 @@
+---
+title: 'Homework2'
+author: "Myname"
+output:
+  word_document:
+    fig_height: 3
+    fig_width: 6
+  html_notebook:
+    fig_height: 2
+    fig_width: 4
+  pdf_document: default
+  html_document:
+    fig_caption: yes
+    fig_height: 10
+    fig_width: 10
+    theme: cosmo
+---
+**Important**: Feel free to try more grammers for Markdown:)
+
+# Content
+1. [Part1: Some useful R commands ](#part1) <br>
+    1.1 [Command Warm Up](#subparagraph1) <br>
+    1.2 [Data objects: Vectors](#subparagraph2) <br>
+    1.3 [Data objects: Matrices](#subparagraph3) <br>
+    1.4 [Data objects: Data frame](#subparagraph4) <br>
+    1.5 [Data sorting](#subparagraph5)<br>
+    1.6 [Matrix calculations](#subparagraph6)<br>
+    1.7 [Reading and writing data](#subparagraph7)<br>
+    1.8 [Re-directing output and file management](#subparagraph8)<br>
+    
+    
+2. [Part2: Financial data analysis](#part2)<br>
+
+## Part1: Some useful R commands <a name="part1"></a>
+<br>
+
+#### 1.1 Command Warm Up <a name="subparagraph1"></a>
+
+* To launch a Web browser that allows to show the help pages type:
+```{r, eval=FALSE}
+help.start()
+```
+
+* To obtain help on particular topic (e.g. ar: to fit an autoregressive time series model to the data) type:
+```{r, eval=FALSE}
+?ar # or help(ar)
+```
+
+* Assignment operator is `<-` or `->` (less used). 
+To type `<-`, use`Alt + -` in Windows or `Option + -` in macOS
+```{r, eval=FALSE}
+x <- 10
+x 
+5 -> x
+x
+```
+
+* The difference of `=` and `<-`: the later one explictly declare a variable in environment, see below:
+```{r, eval=FALSE}
+median(x = 1:5)
+x ## Error: object 'x' not found
+
+```
+
+```{r, eval=FALSE}
+median(x <- 1:5)
+x 
+```
+
+*Extended: `<<-` is another operator which is useful in R Language Object-oriented programming (OOP), it will change the parent state variables in inheritance*
+<br>
+<br>
+
+* R is an object oriented program. It handles many types of object. Objects are created and stored by name. To display the names of (most of) the objects which are currently stored within R, the R command:
+```{r, eval=FALSE}
+objects()
+```
+
+* Remove variables:
+```{r, eval=FALSE}
+rm(x) #to remove the object obj type
+rm(list=ls(all=TRUE)) #to remove all objects > objects()
+```
+
+* To use commands (e.g. functions) stored in an external file, e.g. commands.R in the current working directory work, type:
+```{r, eval=FALSE}
+source("commands.R")
+abcfunction() #here we assume abcfuntion() is defined and stored in commands.R
+```
+
+
+* Use `()` for variable will print the variable out:
+```{r, eval=FALSE}
+(daisy <- "42029ef215256f8fa9fedb53542ee6553eef76027b116f8fac5346211b1e473c")
+```
+
+* Quit R:
+```{r, eval=FALSE}
+q() # no need to try :)
+```
+
+
+
+#### 1.2 Data objects: Vectors <a name="subparagraph2"></a>
+
+* Use `c()` to create a vector:
+```{r, eval=FALSE}
+value.num <- c(3,4,2,6,20) 
+value.char <- c("math","cs","finance") 
+value.logical <- c(F,F,T,T)
+```
+
+* The `rep` function replicates elements of vector:
+```{r, eval=FALSE}
+(value <- rep(5,6))
+```
+
+* The seq function creates a regular sequence of values to form a vector:
+```{r, eval=FALSE}
+seq(from=2,to=12,by=2)
+```
+
+* The functions can be used in combination:
+```{r, eval=FALSE}
+value <- c(1,2,5,rep(3,4),seq(from=1,to=6,by=3)); value
+```
+
+* The scan function is used to enter data at the terminal:
+```{r, eval=FALSE}
+value <- scan()   #press "Esc" to exit
+```
+* Vector operations
+```{r, eval=FALSE}
+x <- runif(10) # generates random vector of length 10 independent, uniformly distributed
+x
+y <- 10*x + 1
+y
+z <- (x-mean(x))/sd(x)
+z
+mean(x)
+sd(x)
+```
+
+#### 1.3 Data objects: Matrices <a name="subparagraph3"></a>
+* A matrix may be created from a vector by using `dim`:
+```{r, eval=FALSE}
+value <- rnorm(10) # generates random vector of length 10 independent, normal distributed
+dim(value) <- c(2,5) #2× 5 matrix
+value
+dim(value) <- NULL # back to vector
+value
+```
+
+* It may also be created from a vector by using matrix:
+```{r, eval=FALSE}
+value1 <- matrix(value,2,5); value1 #2,5 is the dimension of the matrix
+matrix(value,2,5,byrow=T) #type ?matrix to see the difference
+```
+ 
+* To bind a row onto an already existing matrix, the rbind function can be used:
+```{r, eval=FALSE}
+value2 <- rbind(value1,c(1,1,2,2,3)) # add one row
+```
+
+
+* To bind a column onto an already existing matrix, the cbind function can be used:
+```{r, eval=FALSE}
+value3 <- cbind(value2,c(1,1,2)) # add one column
+value3
+```
+
+
+#### 1.4 Data objects: Data frame <a name="subparagraph4"></a>
+* The function data.frame converts a matrix or collection of vectors into a data frame:
+```{r, eval=FALSE}
+value3 <- data.frame(value3)
+value3
+value4 <- data.frame(rnorm(3),runif(3))
+value4
+```
+* To view the row and column names of a data frame:
+
+```{r, eval=FALSE}
+names(value4)
+row.names(value4)
+```
+
+* Alternative labels can be assigned by doing the following:
+```{r, eval=FALSE}
+names(value4) <- c("C1","C2")
+row.names(value3) <- c("R1","R2","R3")
+```
+
+* Names can also be specified within the data.frame function itself:
+```{r, eval=FALSE}
+data.frame(C1=rnorm(3),C2=runif(3),row.names=c("R1","R2","R3"))
+```
+* The following example is to show how to access elements of a vector or matrix:
+```{r, eval=FALSE}
+x <- sample(1:5, 10, rep=T) #produces a random sample of values between one and five, ten times
+x
+ones <- (x == 1); ones #check if all the elements of x are equal to 1
+x[ones] <- 0
+x
+others <- (x > 1)
+y <- x[others] #stores the values greater than 1 into y.
+y
+which(x > 1) #finds indices of elements bigger than 1
+y <- x[-(1:5)] #copies x without the first 5 elements. To exclude values, negative index vectors are used
+y
+```
+
+#### 1.5 Data sorting <a name="subparagraph5"></a>
+The command order allows sorting with tie-breaking: 
+Find an index vector that arranges the first of its arguments in increasing order. Ties are broken by the second argument and any remaining ties are broken by a third argument.
+```{r, eval=FALSE}
+x <- sample(1:5, 20, rep=T) 
+y <- sample(1:5, 20, rep=T) 
+z <- sample(1:5, 20, rep=T) 
+xyz <- rbind(x, y, z) 
+dimnames(xyz)[[2]] <- letters[1:20] #names the columns by the first 20 letters
+xyz
+o <- order(x, y, z) #orders the matrix xyz first by x, then by y and at last by z
+xyz[, o]
+```
+
+#### 1.6 Matrix calculations <a name="subparagraph6"></a>
+```{r, eval=FALSE}
+A*B    #is the matrix of element by element products
+A %*% B #is the matrix product.
+
+x %*% A %*% x #is a quadratic form, if x is a vector
+
+(mat1 <- matrix(c(1,0,1,1), nrow=2))
+(mat2 <- matrix(c(1,1,0,1), nrow=2))
+solve(mat1) # inverts the matrix
+
+#Matrix operation
+mat1 %*% mat2 # product
+mat1 + mat2 # Matrix addition
+t(mat1) # Matrix transposition
+det(mat1) # Matrix determinant
+# diag()
+(A<-diag(c(1,2)))  # input a vector
+(diag(A))          # input a matrix
+(diag(4))          # input a number
+```
+
+#### 1.7 Reading and writing data <a name="subparagraph7"></a>
+
+For reading and writing in files, R uses the working directory, so make sure you either set the data file path or put data file at your working space.
+```{r, eval=FALSE}
+getwd() # check current work space
+setwd("your working space path") # set your working space
+```
+
+There are several ways to read and load data into the R working space, depending on the data format. For simple text data, the command is `read.table`. For .csv files, the command is `read.csv`. The data file is specified in either a single or double quotes; see examples below and the R commands of Lecture 1 available on IVLE.
+<br>
+R treats the data as an object and refer to them by the assigned name. For both loading commands, R stores the data in a matrix framework. As such, one can use the command `dim` (i.e., dimension) to see the size of the data.
+
+```{r, eval=FALSE}
+read.table("http://www.stats.ox.ac.uk/pub/datasets/csb/ch11b.dat") # read via http
+read.table("AAPL.txt") # read via local file; make sure AAPL.txt is under your work space 
+read.csv("AAPL.csv")
+```
+With the growing volume in dataset, the above commands may behave bad if data is larger than 500MB. We recommend to use `fread` instead. `fread` is a function in `data.table` package. <br>
+*Extension: both `fread` and `read.csv` are written via C language, but `fread` memory maps the file into memory and then iterates through the file using pointers. Whereas `read.csv` reads the file into a buffer via a connection.*
+```{r, eval=FALSE}
+install.packages("data.table")
+require(data.table) 
+system.time(fread("AAPL.csv")) # use system.time to check the performance of a function
+fread("AAPL.txt")
+```
+Also, `fwrite` is superior to `write.csv`, use `fwrite` instead.
+*Use `?fread` and `fwrite` to see more info.
+
+
+#### 1.8 Re-directing output and file management <a name="subparagraph8"></a>
+
+By default, the output are showed in the R working space. However, you can re-direct the output to a file in your current working directory. See the following example: 
+
+```{r, eval=FALSE}
+print("hello") 
+sink("out.file") 
+print('hello') 
+sink() 
+file.show('out.file') # shows the file
+file.remove('out.file') # removes out.file 
+list.files() # no out.file any more
+```
+
+## Part2: Financial data analysis <a name="part2"></a>
+Download the financial data of Leture 1 from IVLE, then analyse them (mean, variance, test, plot, etc) as shown on the Lecture by using the R commands.
+
+```{r, eval=FALSE}
+#2.1 load data
+require(data.table)
+rate <- fread("EURUSD.csv")
+#2.2 calculation
+mean(rate$rate)
+var(rate$rate)
+var(rate$return[-1]) # omit NA in first row
+hist(rate$rate)
+hist(rate$return)
+summary(rate)
+fBasics::basicStats(rate$rate)  ## need to install.packages("fBasics")
+#2.3 plot
+require(ggplot2)
+qplot(rate$time, rate$rate, rate, 
+      colour = I("darkblue"), 
+      xlab = "time",
+      ylab = "EU/USD Rate",
+      geom = "line")
+qplot(rate$time, rate$return, rate, 
+      colour = I("darkred"), 
+      xlab = "time",
+      ylab = "EU/USD return",
+      geom = "line")
+```
+
+
