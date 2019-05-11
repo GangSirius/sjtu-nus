@@ -7,7 +7,7 @@ Name: Gang GUO
 <br>
 Experience
 - **Ph.D. in Economics**, *National University of Singapore*
-- **Research Assistant** for Prof. Zhou CHAO, Department of mathematics, *National University of Singapore*
+- **Research Assistant** of Prof. Zhou CHAO, Department of mathematics, *National University of Singapore*
 - **Project Assistant** at Innovation Lab, *International Monetary Fund (IMF) Washington D.C.*
 - **MSc in Quantitative Finance**, *National University of Singapore* 
 - **BA in Mathematical Finance**, Wang Yanan Institute for Studies in Economics (WISE), *Xiamen University*
